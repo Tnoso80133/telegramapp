@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Watch Ad</title>
+</head>
+<body>
+    <h2>觀看廣告 15 秒後可領取代幣</h2>
+
+    <!-- 可以嵌入 Adsterra 或其他影片廣告 -->
+    <div id="ad-container">
+        <p>這裡可以嵌入影片或廣告腳本</p>
+    </div>
+
+    <script>
+        const userId = "{{ user_id }}";
+
+        setTimeout(() => {
+            document.getElementById("reward-btn").style.display = "block";
+        }, 15000);
+
+        function claimReward() {
+            fetch("/reward", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: userId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("✅ Token 已發送，請查看 Telegram！");
+                } else {
+                    alert("❌ 發送失敗：" + data.error);
+                }
+            });
+        }
+    </script>
+
+    <button id="reward-btn" onclick="claimReward()" style="display: none;">
+        ✅ 我已看完廣告，領取代幣
+    </button>
+</body>
+</html>
