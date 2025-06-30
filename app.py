@@ -9,7 +9,7 @@ user_points = {}  # 簡單用字典記錄分數
 
 @app.route('/')
 def home():
-    return '✅ Telegram Mini App Server is Running'
+    return render_template('webapp.html')
 
 @app.route('/webapp')
 def webapp():

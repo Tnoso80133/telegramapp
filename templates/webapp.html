@@ -1,43 +1,43 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Watch Ad</title>
+  <meta charset="UTF-8">
+  <title>Earn Tokens</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <h2>觀看廣告 15 秒後可領取代幣</h2>
+  <h2>🎯 Watch Ad to Earn Tokens</h2>
 
-    <!-- 可以嵌入 Adsterra 或其他影片廣告 -->
-    <div id="ad-container">
-        <p>這裡可以嵌入影片或廣告腳本</p>
-    </div>
+  <p id="status">Waiting...</p>
+  <button id="claimBtn" disabled>✅ Claim 5 Tokens</button>
 
-    <script>
-        const userId = "{{ user_id }}";
+  <script>
+    const tg = window.Telegram.WebApp;
+    const userId = tg.initDataUnsafe?.user?.id;
 
-        setTimeout(() => {
-            document.getElementById("reward-btn").style.display = "block";
-        }, 15000);
+    tg.ready(); // 通知 Telegram Mini App 已準備好
 
-        function claimReward() {
-            fetch("/reward", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_id: userId })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert("✅ Token 已發送，請查看 Telegram！");
-                } else {
-                    alert("❌ 發送失敗：" + data.error);
-                }
-            });
-        }
-    </script>
+    // 模擬廣告結束後顯示按鈕
+    setTimeout(() => {
+      document.getElementById('status').innerText = "⏳ Ad complete!";
+      document.getElementById('claimBtn').disabled = false;
+    }, 15000); // 15 秒廣告時間
 
-    <button id="reward-btn" onclick="claimReward()" style="display: none;">
-        ✅ 我已看完廣告，領取代幣
-    </button>
+    document.getElementById('claimBtn').addEventListener('click', async () => {
+      const res = await fetch('/reward', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId })
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        document.getElementById('status').innerText = "✅ Tokens Sent!";
+        tg.close(); // 可選：完成後自動關閉 Web App
+      } else {
+        document.getElementById('status').innerText = "❌ Error sending tokens.";
+      }
+    });
+  </script>
 </body>
 </html>
