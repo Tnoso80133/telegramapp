@@ -5,49 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Earn Tokens</title>
   <style>
-  body {
-    background-color: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #000000);
-    font-family: sans-serif;
-    text-align: center;
-    padding: 2em;
-  }
-</style>
+    body {
+      background-color: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #000000);
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+    }
+    button {
+      font-size: 1.1em;
+      padding: 0.7em 1.5em;
+      margin-top: 1em;
+    }
+  </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <h2>🎯 Watch Ad to Earn Tokens</h2>
-
   <p id="status">點擊下方按鈕開始觀看廣告</p>
+
   <button id="watchAdBtn">▶ 開始觀看廣告</button>
   <br><br>
   <button id="claimBtn" style="display:none;">✅ 領取 5 個代幣</button>
 
-  <!-- 廣告腳本（只有在按下按鈕後才加載） -->
   <script>
     const tg = window.Telegram.WebApp;
     const userId = tg.initDataUnsafe?.user?.id;
     tg.ready();
 
+    // 廣告跳出事件
     document.getElementById('watchAdBtn').addEventListener('click', () => {
-      document.getElementById('status').innerText = "⏳ 正在播放廣告...";
+      document.getElementById('status').innerText = "⏳ 廣告播放中...請不要關閉視窗";
       document.getElementById('watchAdBtn').disabled = true;
 
-      // 動態插入廣告腳本
-      const adScript = document.createElement('script');
-      adScript.src = '//pl27048462.profitableratecpm.com/ce/3e/f5/ce3ef5095b18b9c62fa218bbed568d2a.js';
-      document.body.appendChild(adScript);
+      // ✅ 彈出廣告頁面（請換成你的有效廣告網址）
+      window.open('https://www.example.com/your-ad-link', '_blank');
 
-      // 模擬等待 15 秒後顯示領取按鈕
+      // 模擬等待 15 秒後顯示領取代幣按鈕
       setTimeout(() => {
-        document.getElementById('status').innerText = "🎉 廣告完成，請領取代幣";
+        document.getElementById('status').innerText = "🎉 廣告播放完畢，請領取代幣";
         document.getElementById('claimBtn').style.display = 'inline-block';
       }, 15000);
     });
 
+    // 領取代幣事件
     document.getElementById('claimBtn').addEventListener('click', async () => {
       document.getElementById('status').innerText = "🔄 傳送中...";
-
       const res = await fetch('/reward', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -57,7 +60,7 @@
       const result = await res.json();
       if (result.success) {
         document.getElementById('status').innerText = "✅ 成功發送代幣！";
-        tg.close(); // 可選：完成後自動關閉 Web App
+        tg.close(); // 可選，關閉 Mini App
       } else {
         document.getElementById('status').innerText = "❌ 發送失敗，請稍後再試。";
       }

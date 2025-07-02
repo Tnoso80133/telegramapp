@@ -23,7 +23,7 @@ def reward_user():
     user_points[user_id] = user_points.get(user_id, 0) + 5
 
     try:
-        message = f"🎉 You earned 5 tokens! Total: {user_points[user_id]}"
+        message = f"🎉 已通过看广告获得代币！ 目前代币总额 : {user_points[user_id]}"
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
         payload = {"chat_id": user_id, "text": message}
         httpx.post(url, data=payload)
