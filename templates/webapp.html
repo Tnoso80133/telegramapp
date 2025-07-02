@@ -33,22 +33,25 @@
     const userId = tg.initDataUnsafe?.user?.id;
     tg.ready();
 
-    // 廣告跳出事件
     document.getElementById('watchAdBtn').addEventListener('click', () => {
-      document.getElementById('status').innerText = "⏳ 廣告播放中...請不要關閉視窗";
+      document.getElementById('status').innerText = "⏳ 廣告播放中，請勿關閉視窗...";
       document.getElementById('watchAdBtn').disabled = true;
 
-      // ✅ 彈出廣告頁面（請換成你的有效廣告網址）
-      window.open('<script type='text/javascript' src='//pl27048462.profitableratecpm.com/ce/3e/f5/ce3ef5095b18b9c62fa218bbed568d2a.js'></script>', '_blank');
+      // ✅ 用 window.open 開啟廣告頁面（彈窗）
+      const adWindow = window.open('https://www.profitableratecpm.com/pxj9kwq6w1?key=454b8160daa334e20604fd2cd0981a25', '_blank');
 
-      // 模擬等待 15 秒後顯示領取代幣按鈕
+      // ✅ 模擬播放 15 秒後可領獎
       setTimeout(() => {
-        document.getElementById('status').innerText = "🎉 廣告播放完畢，請領取代幣";
+        document.getElementById('status').innerText = "🎉 廣告完成，請領取代幣";
         document.getElementById('claimBtn').style.display = 'inline-block';
+
+        // 可選：自動關閉廣告視窗
+        if (adWindow && !adWindow.closed) {
+          adWindow.close();
+        }
       }, 15000);
     });
 
-    // 領取代幣事件
     document.getElementById('claimBtn').addEventListener('click', async () => {
       document.getElementById('status').innerText = "🔄 傳送中...";
       const res = await fetch('/reward', {
@@ -60,7 +63,7 @@
       const result = await res.json();
       if (result.success) {
         document.getElementById('status').innerText = "✅ 成功發送代幣！";
-        tg.close(); // 可選，關閉 Mini App
+        tg.close();
       } else {
         document.getElementById('status').innerText = "❌ 發送失敗，請稍後再試。";
       }
