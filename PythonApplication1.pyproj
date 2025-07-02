@@ -26,6 +26,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="requirements.txt" />
+    <Content Include="templates\index.html" />
     <Content Include="templates\webapp.html" />
   </ItemGroup>
   <ItemGroup>
