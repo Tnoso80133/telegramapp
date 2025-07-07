@@ -2,63 +2,72 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>算命人格測驗</title>
+  <title>命運人格計算</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
+      background-color: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #000000);
       font-family: sans-serif;
       text-align: center;
       padding: 2em;
-      background-color: #f9f9f9;
     }
-    input {
-      padding: 0.5em;
-      font-size: 1em;
-    }
-    button {
-      margin-top: 1em;
+    input, button {
+      font-size: 1.2em;
+      margin: 0.5em;
       padding: 0.5em 1em;
-      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    #result {
+      font-size: 1.5em;
+      margin-top: 1.5em;
+    }
+    #backBtn {
+      margin-top: 2em;
+      background-color: #444;
+      color: white;
     }
   </style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <h2>🔮 輸入生日來測試你的人格</h2>
-  <p>格式：YYYY-MM-DD</p>
-  <input type="date" id="birthdate">
+  <h2>🔮 命運人格計算</h2>
+  <p>請輸入你的出生日期：</p>
+
+  <input type="number" id="year" placeholder="年 (YYYY)" min="1900" max="2100">
+  <input type="number" id="month" placeholder="月 (1-12)" min="1" max="12">
+  <input type="number" id="day" placeholder="日 (1-31)" min="1" max="31">
   <br>
-  <button onclick="calculate()">算出人格</button>
-  <h3 id="result"></h3>
+  <button onclick="calculate()">計算人格</button>
+
+  <div id="result"></div>
+
+  <br>
+  <button id="backBtn" onclick="location.href='/'">🏠 返回主畫面</button>
 
   <script>
-    function digitSum(n) {
-      return n.toString().split('').reduce((sum, d) => sum + parseInt(d), 0);
-    }
-
-    function reduceToOneDigit(n) {
+    function digitalRoot(n) {
       while (n > 9) {
-        n = digitSum(n);
+        n = n.toString().split('').reduce((a, b) => a + parseInt(b), 0);
       }
       return n;
     }
 
     function calculate() {
-      const input = document.getElementById("birthdate").value;
-      if (!input) return alert("請輸入有效的生日");
+      const year = document.getElementById('year').value.padStart(4, '0');
+      const month = document.getElementById('month').value.padStart(2, '0');
+      const day = document.getElementById('day').value.padStart(2, '0');
 
-      const parts = input.split("-");
-      const year = parts[0];
-      const month = parts[1];
-      const day = parts[2];
+      if (!year || !month || !day) {
+        document.getElementById('result').innerText = "⚠️ 請輸入完整的生日。";
+        return;
+      }
 
-      // A = first digit of day, B = second digit
       const A = parseInt(day[0]);
       const B = parseInt(day[1]);
-
-      // C = first digit of month, D = second digit
       const C = parseInt(month[0]);
       const D = parseInt(month[1]);
-
-      // E F G H = 4 digits of year
       const E = parseInt(year[0]);
       const F = parseInt(year[1]);
       const G = parseInt(year[2]);
@@ -68,13 +77,15 @@
       const J = C + D;
       const K = E + F;
       const L = G + H;
-
       const M = I + J;
       const N = K + L;
+      const O = digitalRoot(M + N);
 
-      const O = reduceToOneDigit(M + N);
+      document.getElementById('result').innerText = "🔮 正在計算你的命運人格...";
 
-      document.getElementById("result").innerText = `✨ 你的人格是第 ${O} 人格 ✨`;
+      setTimeout(() => {
+        document.getElementById('result').innerText = `✨ 你的人格是第 ${O} 號人格`;
+      }, 3000);
     }
   </script>
 </body>
