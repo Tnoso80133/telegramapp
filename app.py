@@ -16,6 +16,10 @@ def webapp():
     user_id = request.args.get('user_id', '0')
     return render_template('webapp.html', user_id=user_id)
 
+@app.route('/fortune')
+def fortune():
+    return render_template('fortune.html')
+
 @app.route('/reward', methods=['POST'])
 def reward_user():
     data = request.get_json()

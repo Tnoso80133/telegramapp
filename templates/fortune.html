@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>算命人格測驗</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+      background-color: #f9f9f9;
+    }
+    input {
+      padding: 0.5em;
+      font-size: 1em;
+    }
+    button {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔮 輸入生日來測試你的人格</h2>
+  <p>格式：YYYY-MM-DD</p>
+  <input type="date" id="birthdate">
+  <br>
+  <button onclick="calculate()">算出人格</button>
+  <h3 id="result"></h3>
+
+  <script>
+    function digitSum(n) {
+      return n.toString().split('').reduce((sum, d) => sum + parseInt(d), 0);
+    }
+
+    function reduceToOneDigit(n) {
+      while (n > 9) {
+        n = digitSum(n);
+      }
+      return n;
+    }
+
+    function calculate() {
+      const input = document.getElementById("birthdate").value;
+      if (!input) return alert("請輸入有效的生日");
+
+      const parts = input.split("-");
+      const year = parts[0];
+      const month = parts[1];
+      const day = parts[2];
+
+      // A = first digit of day, B = second digit
+      const A = parseInt(day[0]);
+      const B = parseInt(day[1]);
+
+      // C = first digit of month, D = second digit
+      const C = parseInt(month[0]);
+      const D = parseInt(month[1]);
+
+      // E F G H = 4 digits of year
+      const E = parseInt(year[0]);
+      const F = parseInt(year[1]);
+      const G = parseInt(year[2]);
+      const H = parseInt(year[3]);
+
+      const I = A + B;
+      const J = C + D;
+      const K = E + F;
+      const L = G + H;
+
+      const M = I + J;
+      const N = K + L;
+
+      const O = reduceToOneDigit(M + N);
+
+      document.getElementById("result").innerText = `✨ 你的人格是第 ${O} 人格 ✨`;
+    }
+  </script>
+</body>
+</html>
