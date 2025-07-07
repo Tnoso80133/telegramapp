@@ -23,6 +23,15 @@
       font-size: 1.5em;
       margin-top: 1.5em;
     }
+    #image {
+      margin-top: 1em;
+    }
+    #image img {
+      width: 60%;
+      max-width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
     #backBtn {
       margin-top: 2em;
       background-color: #444;
@@ -42,6 +51,7 @@
   <button onclick="calculate()">計算人格</button>
 
   <div id="result"></div>
+  <div id="image"></div>
 
   <br>
   <button id="backBtn" onclick="location.href='/'">🏠 返回主畫面</button>
@@ -82,9 +92,16 @@
       const O = digitalRoot(M + N);
 
       document.getElementById('result').innerText = "🔮 正在計算你的命運人格...";
+      document.getElementById('image').innerHTML = '';
 
       setTimeout(() => {
-        document.getElementById('result').innerText = `✨ 你的人格是第 ${O} 號人格`;
+        document.getElementById('result').innerText = `✨ 你的人格是第 ${O} 號人格，推荐你使用这款香水`;
+
+        // 計算對應圖片（只有 5 張圖時自動對應 1~9 人格）
+        const imageIndex = (O - 1) % 5 + 1;
+        const imgPath = `/static/images/${imageIndex}.jpeg`;
+
+        document.getElementById('image').innerHTML = `<img src="${imgPath}" alt="人格圖片">`;
       }, 3000);
     }
   </script>
